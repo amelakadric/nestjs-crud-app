@@ -17,17 +17,18 @@ export class UsersService {
     }
 
     findOne(id: string){
-        return this.allUsers.find(item=>item.id===+id);
+        return this.allUsers.find(item=>item.id===Number(id));
     }
 
     update(updateUser: CreateUserDto, id:string){
-        let index = this.allUsers.findIndex(item=>item.id===+id);
+        let index = this.allUsers.findIndex(item=>item.id===Number(id));
         this.allUsers[index]=updateUser;
         return updateUser;
     }
 
     delete(id: string){
-        this.allUsers.splice(+id-1, 1);
+        let index = this.allUsers.findIndex(item=>item.id===Number(id));
+        this.allUsers.splice(index, 1);
         return `Deleted user #${id}`
     }
     
