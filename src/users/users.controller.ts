@@ -18,9 +18,7 @@ export class UsersController {
 
   @Post('createUser')
   createUser(@Body() createUser: CreateUserDto) {
-    const { email, name, type } = createUser;
-    const newUser = new User(email, name, type);
-    return this.usersService.createUser(newUser);
+    return this.usersService.createUser(createUser);
   }
 
   @Get()

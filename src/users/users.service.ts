@@ -1,13 +1,17 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { UpdateUserDto } from 'src/users/dto/update-user.dto';
 import { User } from './models/user.model';
+import { CreateUserDto } from './dto/create-user.dto';
 
 @Injectable()
 export class UsersService {
   private readonly allUsers: User[] = [];
 
-  createUser(user: User) {
-    return this.allUsers.push(user);
+  createUser(createUser: CreateUserDto) {
+    const { email, name, type } = createUser;
+    const newUser = new User(email, name, type);
+    this.allUsers.push(newUser);
+    return newUser;
   }
 
   findAllUsers() {
@@ -24,8 +28,12 @@ export class UsersService {
     if (!user) {
       throw new NotFoundException('User not found');
     }
-    Object.assign(user, { ...Object.fromEntries(Object.entries(updateUser).filter(([_, v]) => v !== undefined)) });
-    this.allUsers[index]=user;
+    Object.assign(user, {
+      ...Object.fromEntries(
+        Object.entries(updateUser).filter(([_, v]) => v !== undefined),
+      ),
+    });
+    this.allUsers[index] = user;
 
     return user;
   }
