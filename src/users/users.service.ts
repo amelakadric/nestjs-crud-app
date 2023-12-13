@@ -1,35 +1,41 @@
-import { Injectable } from '@nestjs/common';
-import { CreateUserDto } from 'src/dto/create-user.dto';
-import { UpdateUserDto } from 'src/dto/update-user.dto';
-import { User } from 'src/models/User';
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { UpdateUserDto } from 'src/users/dto/update-user.dto';
+import { User } from './models/user.model';
 
 @Injectable()
 export class UsersService {
+  private readonly allUsers: User[] = [];
 
-     private readonly allUsers:CreateUserDto[] = []
+  createUser(user: User) {
+    return this.allUsers.push(user);
+  }
 
-    create(user: User){
-        return this.allUsers.push(user);
+  findAllUsers() {
+    return this.allUsers;
+  }
+
+  findOneUser(id: string) {
+    return this.allUsers.find((item) => item.id === Number(id));
+  }
+
+  updateUser(updateUser: UpdateUserDto, id: string) {
+    let index = this.allUsers.findIndex((item) => item.id === Number(id));
+    const user = this.allUsers[index];
+    if (!user) {
+      throw new NotFoundException('User not found');
     }
+    Object.assign(user, { ...Object.fromEntries(Object.entries(updateUser).filter(([_, v]) => v !== undefined)) });
+    this.allUsers[index]=user;
 
-    findAll(){
-        return this.allUsers;
-    }
+    return user;
+  }
 
-    findOne(id: string){
-        return this.allUsers.find(item=>item.id===Number(id));
+  deleteUser(id: string) {
+    let index = this.allUsers.findIndex((item) => item.id === Number(id));
+    if (!this.allUsers[index]) {
+      throw new NotFoundException('User not found');
     }
-
-    update(updateUser: CreateUserDto, id:string){
-        let index = this.allUsers.findIndex(item=>item.id===Number(id));
-        this.allUsers[index]=updateUser;
-        return updateUser;
-    }
-
-    delete(id: string){
-        let index = this.allUsers.findIndex(item=>item.id===Number(id));
-        this.allUsers.splice(index, 1);
-        return `Deleted user #${id}`
-    }
-    
+    this.allUsers.splice(index, 1);
+    return `Deleted user #${id}`;
+  }
 }
