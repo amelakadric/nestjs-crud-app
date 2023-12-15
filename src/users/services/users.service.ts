@@ -76,11 +76,12 @@ export class UsersService {
     let filteredUsers = this.allUsers;
 
     for (let key of Object.keys(filters)) {
-      // filteredUsers = filteredUsers.find((item) => item.key);
+      const value = filters[key];
 
-      Object.entries(filters).filter(([k, v]) => v !== undefined);
+      if (value !== undefined) {
+        filteredUsers = filteredUsers.filter((user) => user[key] === value);
+      }
     }
-
-    return [];
+    return filteredUsers;
   }
 }

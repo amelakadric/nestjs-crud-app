@@ -1,13 +1,18 @@
 import { PartialType } from '@nestjs/mapped-types';
 import { CreateUserDto } from './create-user.dto';
-import { IsEmail, IsString } from 'class-validator';
+import { IsEmail, IsOptional, IsString } from 'class-validator';
+import { Transform } from 'class-transformer';
 
 export class FilterUserDto {
   @IsEmail()
+  @IsOptional()
   email: string;
 
   @IsString()
-  name: string;
+  @IsOptional()
+  name?: string;
 
-  type: number;
+  @IsOptional()
+  @Transform((value) => +value)
+  type?: number;
 }

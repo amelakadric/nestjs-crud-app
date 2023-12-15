@@ -37,8 +37,7 @@ export class UsersController {
   }
 
   @Get('filters')
-  filterUsers(@Query(new ParseIntPipe()) filters: FilterUserDto) {
-    // let filters = new FilterUserDto({ email: email, name: name, type: type });
+  filterUsers(@Query() filters: FilterUserDto) {
     return this.usersService.filterUsers(filters);
   }
 
