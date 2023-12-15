@@ -7,11 +7,15 @@ import {
   Param,
   Post,
   Put,
+  Query,
 } from '@nestjs/common';
 import { CreateUserDto } from '../dtos/create-user.dto';
 import { UpdateUserDto } from 'src/users/dtos/update-user.dto';
 import { UsersService } from '../services/users.service';
 import { User } from '../models/user.model';
+import { FilterUserDto } from '../dtos/filter-user.dto';
+import { filter } from 'rxjs';
+import { ParseIntPipe } from 'src/utils/parse-int.pipe';
 
 @Controller('users')
 export class UsersController {
@@ -30,6 +34,12 @@ export class UsersController {
   findAllUsers(): User[] {
     this.logger.log('Fetching all users');
     return this.usersService.findAllUsers();
+  }
+
+  @Get('filters')
+  filterUsers(@Query(new ParseIntPipe()) filters: FilterUserDto) {
+    // let filters = new FilterUserDto({ email: email, name: name, type: type });
+    return this.usersService.filterUsers(filters);
   }
 
   @Get(':id')

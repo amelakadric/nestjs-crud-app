@@ -7,6 +7,8 @@ import {
 import { UpdateUserDto } from 'src/users/dtos/update-user.dto';
 import { User } from '../models/user.model';
 import { CreateUserDto } from '../dtos/create-user.dto';
+import { FilterUserDto } from '../dtos/filter-user.dto';
+import { filter } from 'rxjs';
 
 @Injectable()
 export class UsersService {
@@ -68,5 +70,17 @@ export class UsersService {
     this.logger.log('User deleted', { user });
     this.allUsers.splice(index, 1);
     return `Deleted user #${id}`;
+  }
+
+  filterUsers(filters: FilterUserDto): User[] {
+    let filteredUsers = this.allUsers;
+
+    for (let key of Object.keys(filters)) {
+      // filteredUsers = filteredUsers.find((item) => item.key);
+
+      Object.entries(filters).filter(([k, v]) => v !== undefined);
+    }
+
+    return [];
   }
 }
