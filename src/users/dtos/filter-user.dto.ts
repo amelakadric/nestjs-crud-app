@@ -4,15 +4,15 @@ import { IsEmail, IsOptional, IsString } from 'class-validator';
 import { Transform } from 'class-transformer';
 
 export class FilterUserDto {
+  @IsOptional()
   @IsEmail()
-  @IsOptional()
-  email: string;
+  email?: string;
 
-  @IsString()
   @IsOptional()
+  @IsString()
   name?: string;
 
   @IsOptional()
-  @Transform((value) => +value)
+  @Transform((value) => Number(value))
   type?: number;
 }

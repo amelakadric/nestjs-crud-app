@@ -12,7 +12,7 @@ export class ParseIntPipe implements PipeTransform {
     if (!value.type) {
       return value;
     }
-    const val = parseInt('' + value.type, 10);
+    const val = Number(value.type);
     if (isNaN(val)) {
       throw new BadRequestException('Validation failed');
     }

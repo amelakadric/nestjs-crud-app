@@ -4,82 +4,86 @@ import {
   Logger,
   NotFoundException,
 } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 import { UpdateUserDto } from 'src/users/dtos/update-user.dto';
-import { User } from '../models/user.model';
+import { User } from '../../database/entity/user.entity';
 import { CreateUserDto } from '../dtos/create-user.dto';
 import { FilterUserDto } from '../dtos/filter-user.dto';
-import { filter } from 'rxjs';
 
 @Injectable()
 export class UsersService {
-  private readonly allUsers: User[] = [];
   logger: Logger;
-
-  constructor() {
+  constructor(
+    @InjectRepository(User)
+    private readonly userRepository: Repository<User>,
+  ) {
     this.logger = new Logger(UsersService.name);
   }
 
-  createUser(createUser: CreateUserDto): User {
-    const { email, name, type } = createUser;
-    const newUser = new User(email, name, type);
-    if (this.allUsers.find((item) => item.email === email)) {
+  async createUser(createUser: CreateUserDto): Promise<User> {
+    if (
+      await this.userRepository.findOne({ where: { email: createUser.email } })
+    ) {
       throw new BadRequestException('User with that email already exists');
     }
-    this.allUsers.push(newUser);
-    this.logger.log('User created', { newUser });
-    return newUser;
+    const newUser = this.userRepository.create(createUser);
+
+    const savedUser = await this.userRepository.save(newUser);
+    this.logger.log('User created', { savedUser });
+    return savedUser;
   }
 
-  findAllUsers(): User[] {
-    this.logger.log('Total length: ' + this.allUsers.length);
-    return this.allUsers;
+  findAllUsers(): Promise<User[]> {
+    return this.userRepository.find();
   }
 
-  findOneUser(id: string): User {
-    let user = this.allUsers.find((item) => item.id === Number(id));
+  async findOneUser(id: string): Promise<User> {
+    const user = await this.userRepository.findOne({
+      where: { id: Number(id) },
+    });
     this.logger.log({ user });
     return user;
   }
 
-  updateUser(updateUser: UpdateUserDto, id: string): User {
-    let index = this.allUsers.findIndex((item) => item.id === Number(id));
-    const user = this.allUsers[index];
+  async updateUser(updateUser: UpdateUserDto, id: string) {
+    const user = await this.userRepository.preload({
+      id: Number(id),
+      ...updateUser,
+    });
+
     if (!user) {
-      this.logger.error('User for update not found', {
+      this.logger.error(`User #${id} not found`, {
         id: id,
         data: updateUser,
       });
-      throw new NotFoundException('User not found');
+      throw new NotFoundException(`User #${id} not found`);
     }
-    Object.assign(user, {
-      ...Object.fromEntries(
-        Object.entries(updateUser).filter(([_, v]) => v !== undefined),
-      ),
-    });
-    this.allUsers[index] = user;
-    this.logger.log('User updated', { user });
-    return user;
+
+    const savedUser = await this.userRepository.save(user);
+    this.logger.log('User updated', { savedUser });
+    return savedUser;
   }
 
-  deleteUser(id: string): string {
-    let index = this.allUsers.findIndex((item) => item.id === Number(id));
-    if (!this.allUsers[index]) {
+  async deleteUser(id: string) {
+    const user = await this.findOneUser(id);
+
+    if (!user) {
       throw new NotFoundException('User not found');
     }
-    let user = this.allUsers[index];
-    this.logger.log('User deleted', { user });
-    this.allUsers.splice(index, 1);
+    const deletedUser = await this.userRepository.remove(user);
+    this.logger.log('User deleted', { deletedUser });
     return `Deleted user #${id}`;
   }
 
-  filterUsers(filters: FilterUserDto): User[] {
-    let filteredUsers = this.allUsers;
+  filterUsers(filters: FilterUserDto) {
+    let filteredUsers = this.findAllUsers();
 
     for (let key of Object.keys(filters)) {
       const value = filters[key];
 
       if (value !== undefined) {
-        filteredUsers = filteredUsers.filter((user) => user[key] === value);
+        // filteredUsers = filteredUsers.filter((user) => user[key] == value);
       }
     }
     return filteredUsers;

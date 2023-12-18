@@ -12,7 +12,7 @@ import {
 import { CreateUserDto } from '../dtos/create-user.dto';
 import { UpdateUserDto } from 'src/users/dtos/update-user.dto';
 import { UsersService } from '../services/users.service';
-import { User } from '../models/user.model';
+import { User } from '../../database/entity/user.entity';
 import { FilterUserDto } from '../dtos/filter-user.dto';
 import { filter } from 'rxjs';
 import { ParseIntPipe } from 'src/utils/parse-int.pipe';
@@ -25,13 +25,13 @@ export class UsersController {
   }
 
   @Post()
-  createUser(@Body() createUser: CreateUserDto): User {
+  createUser(@Body() createUser: CreateUserDto) {
     this.logger.log('Creating user', createUser);
     return this.usersService.createUser(createUser);
   }
 
   @Get()
-  findAllUsers(): User[] {
+  findAllUsers() {
     this.logger.log('Fetching all users');
     return this.usersService.findAllUsers();
   }
@@ -42,19 +42,19 @@ export class UsersController {
   }
 
   @Get(':id')
-  findUser(@Param('id') id: string): User {
+  findUser(@Param('id') id: string) {
     this.logger.log('Fetching user #' + id);
     return this.usersService.findOneUser(id);
   }
 
   @Put(':id')
-  updateUser(@Param('id') id: string, @Body() updateUser: UpdateUserDto): User {
+  updateUser(@Param('id') id: string, @Body() updateUser: UpdateUserDto) {
     this.logger.log('Updating user #' + id);
     return this.usersService.updateUser(updateUser, id);
   }
 
   @Delete(':id')
-  deleteUser(@Param('id') id: string): string {
+  deleteUser(@Param('id') id: string) {
     this.logger.log('Deleting user #' + id);
 
     return this.usersService.deleteUser(id);
