@@ -6,6 +6,7 @@ import { UserRepository } from 'src/database/repositories/user.repository';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Post } from 'src/database/entities/post.entity';
+import { UpdatePostDto } from '../dtos/update-post.dto';
 
 @Injectable()
 export class PostsService {
@@ -24,5 +25,17 @@ export class PostsService {
 
   async getAllPosts() {
     return this.postRepository.getPosts();
+  }
+
+  getPostById(id: string) {
+    return this.postRepository.getPostById(Number(id));
+  }
+
+  updatePost(id: string, updatePostDto: UpdatePostDto) {
+    return this.postRepository.updatePost(Number(id), updatePostDto);
+  }
+
+  deletePost(id: string) {
+    return this.postRepository.deletePost(Number(id));
   }
 }

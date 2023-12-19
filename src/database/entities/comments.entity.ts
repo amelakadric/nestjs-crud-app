@@ -19,10 +19,10 @@ export class Comment {
   @Column()
   date: Date;
 
-  // @ManyToOne(() => User, (user) => user.comments)
-  // user: User;
+  @ManyToOne(() => User, (user) => user.comments)
+  user: User;
 
-  // @ManyToOne(() => Post, (post) => post.comments)
-  // @JoinColumn()
-  // post: Post;
+  @ManyToOne(() => Post, (post) => post.comments)
+  @JoinColumn()
+  post: Post;
 }
