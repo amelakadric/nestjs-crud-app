@@ -21,4 +21,8 @@ export class PostRepository extends Repository<Post> {
     const post = this.create({ user: user, content: content, date: date });
     return this.save(post);
   }
+
+  async getPosts() {
+    return this.find({ relations: { user: true } });
+  }
 }

@@ -11,8 +11,6 @@ import { Post } from 'src/database/entities/post.entity';
 export class PostsService {
   logger: Logger;
   constructor(
-    // @InjectRepository(Post)
-    // private readonly postRepository: Repository<Post>,
     private readonly postRepository: PostRepository,
     private readonly userRepository: UserRepository,
   ) {
@@ -22,5 +20,9 @@ export class PostsService {
   async createPost(createPostDto: CreatePostDto) {
     const user = await this.userRepository.findById(createPostDto.userId);
     return this.postRepository.store(createPostDto, user);
+  }
+
+  async getAllPosts() {
+    return this.postRepository.getPosts();
   }
 }
