@@ -6,7 +6,6 @@ export class CreatePostDto {
   @IsString()
   content: string;
 
-  //   @IsDate()
   @Transform((date) => {
     return new Date();
   })

@@ -23,7 +23,20 @@ export class CommentRepository extends Repository<Comment> {
     return this.find();
   }
 
-  async store(createCommentDto: CreateCommentDto, user: User, post: Post) {}
+  async getUserComments(user: User) {
+    return this.find({ where: { user: user } });
+  }
+
+  async store(createCommentDto: CreateCommentDto, user: User, post: Post) {
+    const { commentText, date } = createCommentDto;
+    const comment = this.create({
+      commentText: commentText,
+      date: date,
+      user: user,
+      post: post,
+    });
+    return this.save(comment);
+  }
 
   async getCommentById(id: number) {
     const comment = await this.findOne({ where: { commentId: id } });
