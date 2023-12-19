@@ -6,19 +6,24 @@ import { UsersController } from './users/controllers/users.controller';
 import { UsersService } from './users/services/users.service';
 import { LoggerMiddleware } from './utils/logger.middleware';
 import { UsersModule } from './users/users.module';
+import { ConfigModule } from '@nestjs/config';
+import { typeOrmConfig } from './config/typeorm.config';
+import { UserRepository } from './database/repositories/user.repository';
+import { User } from './database/entity/user.entity';
 
 @Module({
   imports: [
+    ConfigModule.forRoot(),
     UsersModule,
     TypeOrmModule.forRoot({
       type: 'postgres',
       host: 'localhost',
       port: 5432,
-      username: 'amelakadric',
-      password: '',
-      database: 'postgres',
-      autoLoadEntities: true,
-      synchronize: true,
+      username: process.env.POSTGRES_USERNAME,
+      password: process.env.POSTGRES_PASSWORD,
+      database: process.env.DATABASE,
+      entities: [User],
+      migrations: [],
     }),
   ],
   controllers: [AppController, UsersController],

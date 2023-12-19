@@ -10,68 +10,76 @@ import { UpdateUserDto } from 'src/users/dtos/update-user.dto';
 import { User } from '../../database/entity/user.entity';
 import { CreateUserDto } from '../dtos/create-user.dto';
 import { FilterUserDto } from '../dtos/filter-user.dto';
+import { UserRepository } from 'src/database/repositories/user.repository';
+import { find } from 'rxjs';
 
 @Injectable()
 export class UsersService {
   logger: Logger;
-  constructor(
-    @InjectRepository(User)
-    private readonly userRepository: Repository<User>,
-  ) {
+  constructor(private readonly userRepository: UserRepository) {
     this.logger = new Logger(UsersService.name);
   }
 
   async createUser(createUser: CreateUserDto): Promise<User> {
-    if (
-      await this.userRepository.findOne({ where: { email: createUser.email } })
-    ) {
-      throw new BadRequestException('User with that email already exists');
+    try {
+      return this.userRepository.store(createUser);
+    } catch (error) {
+      this.logger.log(`UsersService:create: ${JSON.stringify(error.message)}`);
+      throw new Error(error.message);
     }
-    const newUser = this.userRepository.create(createUser);
-
-    const savedUser = await this.userRepository.save(newUser);
-    this.logger.log('User created', { savedUser });
-    return savedUser;
   }
 
-  findAllUsers(): Promise<User[]> {
-    return this.userRepository.find();
+  async findAllUsers(): Promise<User[]> {
+    try {
+      const users = await this.userRepository.findAll();
+      if (users?.length === 0) {
+        throw new Error('No record found.');
+      }
+      return users;
+    } catch (error) {
+      this.logger.log(
+        `UsersService:findAll : ${JSON.stringify(error.message)}`,
+      );
+    }
   }
 
   async findOneUser(id: string): Promise<User> {
-    const user = await this.userRepository.findOne({
-      where: { id: Number(id) },
-    });
-    this.logger.log({ user });
-    return user;
+    try {
+      const user = await this.userRepository.findById(Number(id));
+      if (!user) {
+        throw new Error('User not found.');
+      }
+      return user;
+    } catch (error) {
+      this.logger.log(
+        `UsersService:findById: ${JSON.stringify(error.message)}`,
+      );
+      throw new Error(error.message);
+    }
   }
 
   async updateUser(updateUser: UpdateUserDto, id: string) {
-    const user = await this.userRepository.preload({
-      id: Number(id),
-      ...updateUser,
-    });
+    try {
+      await this.findOneUser(id);
+      const savedUser = await this.userRepository.updateOne(
+        Number(id),
+        UpdateUserDto,
+      );
+      this.logger.log('User updated', { savedUser });
 
-    if (!user) {
-      this.logger.error(`User #${id} not found`, {
-        id: id,
-        data: updateUser,
-      });
-      throw new NotFoundException(`User #${id} not found`);
+      return savedUser;
+    } catch (error) {
+      this.logger.log(`UsersService:update: ${JSON.stringify(error.message)}`);
+      throw new Error(error.message);
     }
-
-    const savedUser = await this.userRepository.save(user);
-    this.logger.log('User updated', { savedUser });
-    return savedUser;
   }
 
   async deleteUser(id: string) {
     const user = await this.findOneUser(id);
-
     if (!user) {
       throw new NotFoundException('User not found');
     }
-    const deletedUser = await this.userRepository.remove(user);
+    const deletedUser = await this.userRepository.destroy(Number(id));
     this.logger.log('User deleted', { deletedUser });
     return `Deleted user #${id}`;
   }
