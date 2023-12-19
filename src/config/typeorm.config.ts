@@ -1,16 +1,15 @@
 import { TypeOrmModuleOptions } from '@nestjs/typeorm';
-import { User } from 'src/database/entity/user.entity';
+import { Post } from 'src/database/entities/post.entity';
+import { User } from 'src/database/entities/user.entity';
+import { Comment } from 'src/database/entities/comments.entity';
 
 export const typeOrmConfig = (): TypeOrmModuleOptions => {
   return {
     type: 'postgres',
-    host: 'localhost',
-    port: 5432,
-    username: process.env.POSTGRES_USERNAME,
-    password: process.env.POSTGRES_PASSWORD,
-    database: process.env.DATABASE,
-    entities: [User],
+    url: process.env.DATABASE_URL,
+    entities: [User, Post, Comment],
     migrations: [],
     logging: true,
+    synchronize: true,
   };
 };

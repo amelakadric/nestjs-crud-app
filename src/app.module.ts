@@ -9,7 +9,9 @@ import { UsersModule } from './users/users.module';
 import { ConfigModule } from '@nestjs/config';
 import { typeOrmConfig } from './config/typeorm.config';
 import { UserRepository } from './database/repositories/user.repository';
-import { User } from './database/entity/user.entity';
+import { User } from './database/entities/user.entity';
+import { CommentsModule } from './comments/comments.module';
+import { PostsModule } from './posts/posts.module';
 
 @Module({
   imports: [
@@ -18,6 +20,8 @@ import { User } from './database/entity/user.entity';
     TypeOrmModule.forRootAsync({
       useFactory: async () => typeOrmConfig(),
     }),
+    CommentsModule,
+    PostsModule,
   ],
   controllers: [AppController, UsersController],
   providers: [AppService],
