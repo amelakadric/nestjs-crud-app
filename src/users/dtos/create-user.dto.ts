@@ -8,6 +8,6 @@ export class CreateUserDto {
   @IsString()
   name: string;
 
-  @IsInt()
-  type: number;
+  @IsString()
+  password: string;
 }

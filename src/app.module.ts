@@ -17,11 +17,11 @@ import { PostsModule } from './posts/posts.module';
   imports: [
     ConfigModule.forRoot(),
     UsersModule,
+    CommentsModule,
+    PostsModule,
     TypeOrmModule.forRootAsync({
       useFactory: async () => typeOrmConfig(),
     }),
-    CommentsModule,
-    PostsModule,
   ],
   controllers: [AppController, UsersController],
   providers: [AppService],

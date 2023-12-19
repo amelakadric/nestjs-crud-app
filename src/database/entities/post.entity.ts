@@ -23,6 +23,6 @@ export class Post {
   @ManyToOne(() => User, (user) => user.posts)
   user: User;
 
-  @OneToMany(() => Comment, (comment) => comment.post)
-  comments: Comment[];
+  // @OneToMany(() => Comment, (comment) => comment.post)
+  // comments: Comment[];
 }
