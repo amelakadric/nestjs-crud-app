@@ -15,15 +15,8 @@ import { User } from './database/entity/user.entity';
   imports: [
     ConfigModule.forRoot(),
     UsersModule,
-    TypeOrmModule.forRoot({
-      type: 'postgres',
-      host: 'localhost',
-      port: 5432,
-      username: process.env.POSTGRES_USERNAME,
-      password: process.env.POSTGRES_PASSWORD,
-      database: process.env.DATABASE,
-      entities: [User],
-      migrations: [],
+    TypeOrmModule.forRootAsync({
+      useFactory: async () => typeOrmConfig(),
     }),
   ],
   controllers: [AppController, UsersController],
