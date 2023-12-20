@@ -1,6 +1,6 @@
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Comment } from '../entities/comments.entity';
+import { Comment } from '../entities/comment.entity';
 import { CreateCommentDto } from 'src/comments/dtos/create-comment.dto';
 import { Post } from '../entities/post.entity';
 import { User } from '../entities/user.entity';

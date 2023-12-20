@@ -10,7 +10,7 @@ import {
 import { CommentsService } from '../services/comments.service';
 import { CreateCommentDto } from '../dtos/create-comment.dto';
 import { UpdateCommentDto } from '../dtos/update-comment.dto';
-import { Comment } from '../../database/entities/comments.entity';
+import { Comment } from '../../database/entities/comment.entity';
 
 @Controller('comments')
 export class CommentsController {

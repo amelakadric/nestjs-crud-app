@@ -3,7 +3,7 @@ import { CommentRepository } from 'src/database/repositories/comment.repository'
 import { UserRepository } from 'src/database/repositories/user.repository';
 import { CreateCommentDto } from '../dtos/create-comment.dto';
 import { PostRepository } from 'src/database/repositories/post.repository';
-import { Comment } from '../../database/entities/comments.entity';
+import { Comment } from '../../database/entities/comment.entity';
 import { UpdateCommentDto } from '../dtos/update-comment.dto';
 
 @Injectable()

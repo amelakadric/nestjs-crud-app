@@ -7,7 +7,7 @@ import { PostRepository } from 'src/database/repositories/post.repository';
 import { UserRepository } from 'src/database/repositories/user.repository';
 import { User } from 'src/database/entities/user.entity';
 import { Post } from 'src/database/entities/post.entity';
-import { Comment } from 'src/database/entities/comments.entity';
+import { Comment } from 'src/database/entities/comment.entity';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Comment, User, Post])],

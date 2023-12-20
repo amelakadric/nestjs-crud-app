@@ -16,6 +16,9 @@ export class Comment {
   @Column({ type: 'text', nullable: false, unique: false })
   commentText: string;
 
+  // @Column({ type: 'integer', nullable: true })
+  // likes: number;
+
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   date: Date;
 

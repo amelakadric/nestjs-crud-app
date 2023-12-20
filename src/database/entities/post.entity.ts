@@ -7,7 +7,7 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { User } from './user.entity';
-import { Comment } from './comments.entity';
+import { Comment } from './comment.entity';
 import { text } from 'stream/consumers';
 import { timestamp } from 'rxjs';
 
