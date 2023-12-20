@@ -17,7 +17,7 @@ export class PostRepository extends Repository<Post> {
       postRepository.queryRunner,
     );
   }
-  async store(createPostDto: CreatePostDto, user: User) {
+  async createPost(createPostDto: CreatePostDto, user: User) {
     const { content, date, userId } = createPostDto;
 
     const post = this.create({ user: user, content: content, date: date });
@@ -25,7 +25,13 @@ export class PostRepository extends Repository<Post> {
   }
 
   async getPosts() {
-    return this.find({ relations: { user: true } });
+    const posts = await this.find({
+      relations: { user: true, comments: true },
+    });
+    if (posts?.length === 0) {
+      throw new NotFoundException('No posts found.');
+    }
+    return posts;
   }
 
   async getPostById(id: number) {

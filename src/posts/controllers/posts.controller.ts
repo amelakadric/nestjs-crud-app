@@ -11,6 +11,7 @@ import {
 import { PostsService } from '../services/posts.service';
 import { CreatePostDto } from '../dtos/create-post.dto';
 import { UpdatePostDto } from '../dtos/update-post.dto';
+import { Post as PostEntity } from 'src/database/entities/post.entity';
 
 @Controller('posts')
 export class PostsController {
@@ -20,27 +21,30 @@ export class PostsController {
   }
 
   @Post()
-  createPost(@Body() createPostDto: CreatePostDto) {
+  createPost(@Body() createPostDto: CreatePostDto): Promise<PostEntity> {
     return this.postsService.createPost(createPostDto);
   }
 
   @Get()
-  getPosts() {
+  getPosts(): Promise<PostEntity[]> {
     return this.postsService.getAllPosts();
   }
 
   @Get(':id')
-  getPostById(@Param('id') id: string) {
+  getPostById(@Param('id') id: string): Promise<PostEntity> {
     return this.postsService.getPostById(id);
   }
 
   @Put(':id')
-  updatePost(@Param('id') id: string, @Body() updatePostDto: UpdatePostDto) {
-    this.postsService.updatePost(id, updatePostDto);
+  updatePost(
+    @Param('id') id: string,
+    @Body() updatePostDto: UpdatePostDto,
+  ): Promise<PostEntity> {
+    return this.postsService.updatePost(id, updatePostDto);
   }
 
   @Delete(':id')
   deletePost(@Param('id') id: string) {
-    this.postsService.deletePost(id);
+    return this.postsService.deletePost(id);
   }
 }

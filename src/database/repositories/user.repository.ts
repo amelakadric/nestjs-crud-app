@@ -18,7 +18,9 @@ export class UserRepository extends Repository<User> {
   }
 
   async findAll(): Promise<User[]> {
-    const users = await this.find();
+    const users = await this.find({
+      relations: { posts: true, comments: true },
+    });
     if (users?.length === 0) {
       throw new NotFoundException('No users found.');
     }
@@ -49,11 +51,14 @@ export class UserRepository extends Repository<User> {
     }
     Object.assign(user, updateUserDto);
     console.log(user);
-    const savedUser = await this.save(user);
-    return savedUser;
+    return await this.save(user);
   }
 
   async destroy(id: number): Promise<void> {
-    await this.delete(id);
+    const user = await this.findById(id);
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+    await this.remove(user);
   }
 }

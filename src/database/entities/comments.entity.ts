@@ -19,7 +19,7 @@ export class Comment {
   @Column()
   date: Date;
 
-  @ManyToOne(() => User, (user) => user.comments)
+  @ManyToOne(() => User, (user) => user.comments, {})
   user: User;
 
   @ManyToOne(() => Post, (post) => post.comments)

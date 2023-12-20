@@ -18,24 +18,30 @@ export class PostsService {
     this.logger = new Logger(PostsService.name);
   }
 
-  async createPost(createPostDto: CreatePostDto) {
+  async createPost(createPostDto: CreatePostDto): Promise<Post> {
     const user = await this.userRepository.findById(createPostDto.userId);
-    return this.postRepository.store(createPostDto, user);
+    const post = this.postRepository.createPost(createPostDto, user);
+    this.logger.log('Post created', { post });
+    return post;
   }
 
-  async getAllPosts() {
+  async getAllPosts(): Promise<Post[]> {
     return this.postRepository.getPosts();
   }
 
-  getPostById(id: string) {
-    return this.postRepository.getPostById(Number(id));
+  async getPostById(id: string): Promise<Post> {
+    return await this.postRepository.getPostById(Number(id));
   }
 
-  updatePost(id: string, updatePostDto: UpdatePostDto) {
-    return this.postRepository.updatePost(Number(id), updatePostDto);
+  async updatePost(id: string, updatePostDto: UpdatePostDto): Promise<Post> {
+    const updatedPost = await this.postRepository.getPostById(Number(id));
+    this.logger.log('Post uploaded', { updatedPost });
+    return updatedPost;
   }
 
-  deletePost(id: string) {
-    return this.postRepository.deletePost(Number(id));
+  async deletePost(id: string) {
+    const deletedPost = await this.postRepository.deletePost(Number(id));
+    this.logger.log('Post deleted', { deletedPost });
+    return `Delted post #${id}`;
   }
 }

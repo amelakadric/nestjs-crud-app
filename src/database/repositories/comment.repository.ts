@@ -19,15 +19,27 @@ export class CommentRepository extends Repository<Comment> {
     );
   }
 
-  async getComments() {
-    return this.find();
+  async getComments(): Promise<Comment[]> {
+    const comments = await this.find({ relations: { user: true, post: true } });
+    if (comments?.length === 0) {
+      throw new NotFoundException('No comments found.');
+    }
+    return comments;
   }
 
-  async getUserComments(user: User) {
-    return this.find({ where: { user: user } });
+  async getUserComments(user: User): Promise<Comment[]> {
+    const comments = await this.find({ where: { user: user } });
+    if (comments?.length === 0) {
+      throw new NotFoundException(`No comments found for user #${user.id}.`);
+    }
+    return comments;
   }
 
-  async store(createCommentDto: CreateCommentDto, user: User, post: Post) {
+  async createComment(
+    createCommentDto: CreateCommentDto,
+    user: User,
+    post: Post,
+  ): Promise<Comment> {
     const { commentText, date } = createCommentDto;
     const comment = this.create({
       commentText: commentText,
@@ -38,7 +50,7 @@ export class CommentRepository extends Repository<Comment> {
     return this.save(comment);
   }
 
-  async getCommentById(id: number) {
+  async getCommentById(id: number): Promise<Comment> {
     const comment = await this.findOne({ where: { commentId: id } });
     if (!comment) {
       throw new NotFoundException(`Post with id #${id} not found.`);
@@ -46,7 +58,10 @@ export class CommentRepository extends Repository<Comment> {
     return comment;
   }
 
-  async updateComment(id: number, updateCommentDto: UpdateCommentDto) {
+  async updateComment(
+    id: number,
+    updateCommentDto: UpdateCommentDto,
+  ): Promise<Comment> {
     const comment = await this.findOneBy({ commentId: id });
     if (!comment) {
       throw new NotFoundException(`Comment with id #${id} not found.`);
@@ -55,7 +70,8 @@ export class CommentRepository extends Repository<Comment> {
     return this.save(comment);
   }
 
-  async deleteComment(id: number) {
+  async deleteComment(id: number): Promise<void> {
+    const comment = this.getCommentById(id);
     await this.delete(id);
   }
 }
