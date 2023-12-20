@@ -3,7 +3,6 @@ import {
   Entity,
   ManyToOne,
   OneToMany,
-  OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { User } from './user.entity';
@@ -23,6 +22,8 @@ export class Post {
   @ManyToOne(() => User, (user) => user.posts)
   user: User;
 
-  @OneToMany(() => Comment, (comment) => comment.post)
+  @OneToMany(() => Comment, (comment) => comment.post, {
+    cascade: ['insert', 'update', 'remove'],
+  })
   comments: Comment[];
 }
