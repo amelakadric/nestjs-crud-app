@@ -19,10 +19,15 @@ export class Comment {
   @Column()
   date: Date;
 
-  @ManyToOne(() => User, (user) => user.comments, {})
+  @ManyToOne(() => User, (user) => user.comments, {
+    cascade: true,
+    onDelete: 'CASCADE',
+  })
   user: User;
 
-  @ManyToOne(() => Post, (post) => post.comments)
-  @JoinColumn()
+  @ManyToOne(() => Post, (post) => post.comments, {
+    cascade: true,
+    onDelete: 'CASCADE',
+  })
   post: Post;
 }

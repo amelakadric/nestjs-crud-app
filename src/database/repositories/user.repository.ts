@@ -59,6 +59,6 @@ export class UserRepository extends Repository<User> {
     if (!user) {
       throw new NotFoundException('User not found');
     }
-    await this.remove(user);
+    await this.delete(user);
   }
 }

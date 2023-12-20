@@ -3,6 +3,7 @@ import {
   Entity,
   ManyToOne,
   OneToMany,
+  OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { User } from './user.entity';
@@ -19,11 +20,12 @@ export class Post {
   @Column()
   date: Date;
 
-  @ManyToOne(() => User, (user) => user.posts)
+  @ManyToOne(() => User, (user) => user.posts, {
+    cascade: true,
+    onDelete: 'CASCADE',
+  })
   user: User;
 
-  @OneToMany(() => Comment, (comment) => comment.post, {
-    cascade: ['insert', 'update', 'remove'],
-  })
+  @OneToMany(() => Comment, (comment) => comment.post)
   comments: Comment[];
 }

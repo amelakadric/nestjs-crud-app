@@ -17,12 +17,14 @@ export class User {
   password: string;
 
   @OneToMany(() => Post, (post) => post.user, {
-    cascade: ['insert', 'update', 'remove'],
+    // cascade: true,
+    // onDelete: 'CASCADE',
   })
   posts: Post[];
 
   @OneToMany(() => Comment, (comment) => comment.user, {
-    cascade: ['insert', 'update', 'remove'],
+    // cascade: true,
+    // onDelete: 'CASCADE',
   })
   comments: Comment[];
 }

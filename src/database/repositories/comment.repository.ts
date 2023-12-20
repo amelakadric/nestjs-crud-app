@@ -53,7 +53,7 @@ export class CommentRepository extends Repository<Comment> {
   async getCommentById(id: number): Promise<Comment> {
     const comment = await this.findOne({ where: { commentId: id } });
     if (!comment) {
-      throw new NotFoundException(`Post with id #${id} not found.`);
+      throw new NotFoundException(`Comment with id #${id} not found.`);
     }
     return comment;
   }
@@ -71,7 +71,11 @@ export class CommentRepository extends Repository<Comment> {
   }
 
   async deleteComment(id: number): Promise<void> {
-    const comment = this.getCommentById(id);
+    try {
+      const comment = this.getCommentById(id);
+    } catch (error) {
+      throw new NotFoundException(`Comment with id #${id} not found.`);
+    }
     await this.delete(id);
   }
 }
