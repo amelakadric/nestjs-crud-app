@@ -52,6 +52,10 @@ export class PostRepository extends Repository<Post> {
   }
 
   async deletePost(id: number) {
-    await this.delete(id);
+    const post = await this.getPostById(id);
+    if (!post) {
+      throw new NotFoundException(`Post with id #${id} not found.`);
+    }
+    await this.delete(post);
   }
 }
