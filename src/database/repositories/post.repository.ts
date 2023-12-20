@@ -18,9 +18,9 @@ export class PostRepository extends Repository<Post> {
     );
   }
   async createPost(createPostDto: CreatePostDto, user: User) {
-    const { content, date, userId } = createPostDto;
+    const { content, userId } = createPostDto;
 
-    const post = this.create({ user: user, content: content, date: date });
+    const post = this.create({ user: user, content: content });
     return this.save(post);
   }
 

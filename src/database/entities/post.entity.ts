@@ -8,16 +8,18 @@ import {
 } from 'typeorm';
 import { User } from './user.entity';
 import { Comment } from './comments.entity';
+import { text } from 'stream/consumers';
+import { timestamp } from 'rxjs';
 
 @Entity('posts')
 export class Post {
   @PrimaryGeneratedColumn()
   postId: number;
 
-  @Column()
+  @Column({ type: 'text', nullable: true, unique: false })
   content: string;
 
-  @Column()
+  @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   date: Date;
 
   @ManyToOne(() => User, (user) => user.posts, {
@@ -26,6 +28,8 @@ export class Post {
   })
   user: User;
 
-  @OneToMany(() => Comment, (comment) => comment.post)
+  @OneToMany(() => Comment, (comment) => comment.post, {
+    eager: true,
+  })
   comments: Comment[];
 }

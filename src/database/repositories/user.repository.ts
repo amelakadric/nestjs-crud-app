@@ -3,7 +3,12 @@ import { Repository, UpdateResult } from 'typeorm';
 import { User } from '../entities/user.entity';
 import { CreateUserDto } from 'src/users/dtos/create-user.dto';
 import { UpdateUserDto } from 'src/users/dtos/update-user.dto';
-import { HttpException, HttpStatus, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  HttpException,
+  HttpStatus,
+  NotFoundException,
+} from '@nestjs/common';
 
 export class UserRepository extends Repository<User> {
   constructor(
@@ -18,9 +23,7 @@ export class UserRepository extends Repository<User> {
   }
 
   async findAll(): Promise<User[]> {
-    const users = await this.find({
-      relations: { posts: true, comments: true },
-    });
+    const users = await this.find();
     if (users?.length === 0) {
       throw new NotFoundException('No users found.');
     }
@@ -36,6 +39,16 @@ export class UserRepository extends Repository<User> {
   }
 
   async store(user: CreateUserDto): Promise<User> {
+    const userEmailAlreadyExists = await this.findOneBy({ email: user.email });
+    if (userEmailAlreadyExists) {
+      throw new BadRequestException('User with this email already exists');
+    }
+
+    const userNameAlreadyExists = await this.findOneBy({ name: user.name });
+    if (userNameAlreadyExists) {
+      throw new BadRequestException('User with this name already exists');
+    }
+
     const newUser = this.create(user);
     if (!newUser) {
       throw new HttpException('Error with the database', HttpStatus.GONE);

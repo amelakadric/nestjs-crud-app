@@ -40,10 +40,9 @@ export class CommentRepository extends Repository<Comment> {
     user: User,
     post: Post,
   ): Promise<Comment> {
-    const { commentText, date } = createCommentDto;
+    const { commentText } = createCommentDto;
     const comment = this.create({
       commentText: commentText,
-      date: date,
       user: user,
       post: post,
     });

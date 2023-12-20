@@ -13,10 +13,10 @@ export class Comment {
   @PrimaryGeneratedColumn()
   commentId: number;
 
-  @Column()
+  @Column({ type: 'text', nullable: false, unique: false })
   commentText: string;
 
-  @Column()
+  @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   date: Date;
 
   @ManyToOne(() => User, (user) => user.comments, {

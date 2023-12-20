@@ -7,18 +7,22 @@ export class User {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
+  @Column({ type: 'varchar', nullable: false, unique: true })
   email: string;
 
-  @Column()
+  @Column({ type: 'varchar', nullable: false, unique: true })
   name: string;
 
-  @Column()
+  @Column({ select: false, type: 'varchar', nullable: false, unique: false })
   password: string;
 
-  @OneToMany(() => Post, (post) => post.user, {})
+  @OneToMany(() => Post, (post) => post.user, {
+    eager: true,
+  })
   posts: Post[];
 
-  @OneToMany(() => Comment, (comment) => comment.user, {})
+  @OneToMany(() => Comment, (comment) => comment.user, {
+    eager: true,
+  })
   comments: Comment[];
 }
