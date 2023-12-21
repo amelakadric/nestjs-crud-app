@@ -17,7 +17,7 @@ export class UsersService {
     this.logger = new Logger(UsersService.name);
   }
 
-  createUser(createUser: CreateUserDto): Promise<User> {
+  async createUser(createUser: CreateUserDto): Promise<User> {
     return this.userRepository.store(createUser);
   }
 
@@ -43,18 +43,5 @@ export class UsersService {
     const deletedUser = await this.userRepository.destroy(Number(id));
     this.logger.log('User deleted', { deletedUser });
     return `Deleted user #${id}`;
-  }
-
-  filterUsers(filters: FilterUserDto) {
-    let filteredUsers = this.findAllUsers();
-
-    for (let key of Object.keys(filters)) {
-      const value = filters[key];
-
-      if (value !== undefined) {
-        // filteredUsers = filteredUsers.filter((user) => user[key] == value);
-      }
-    }
-    return filteredUsers;
   }
 }

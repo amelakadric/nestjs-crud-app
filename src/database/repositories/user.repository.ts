@@ -67,11 +67,11 @@ export class UserRepository extends Repository<User> {
     return await this.save(user);
   }
 
-  async destroy(id: number): Promise<void> {
+  async destroy(id: number) {
     const user = await this.findById(id);
     if (!user) {
       throw new NotFoundException('User not found');
     }
-    await this.delete(user);
+    return await this.remove(user);
   }
 }

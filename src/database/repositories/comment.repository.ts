@@ -69,11 +69,11 @@ export class CommentRepository extends Repository<Comment> {
     return this.save(comment);
   }
 
-  async deleteComment(id: number): Promise<void> {
+  async deleteComment(id: number): Promise<Comment> {
     const comment = await this.getCommentById(id);
     if (!comment) {
       throw new NotFoundException(`Comment with id #${id} not found.`);
     }
-    await this.delete(comment);
+    return await this.remove(comment);
   }
 }

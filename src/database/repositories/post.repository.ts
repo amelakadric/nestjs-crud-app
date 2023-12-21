@@ -56,6 +56,6 @@ export class PostRepository extends Repository<Post> {
     if (!post) {
       throw new NotFoundException(`Post with id #${id} not found.`);
     }
-    await this.delete(post);
+    return await this.remove(post);
   }
 }
