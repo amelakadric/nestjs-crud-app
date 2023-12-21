@@ -11,7 +11,7 @@ import {
 import { PostsService } from '../services/posts.service';
 import { CreatePostDto } from '../dtos/create-post.dto';
 import { UpdatePostDto } from '../dtos/update-post.dto';
-import { Post as PostEntity } from 'src/database/entities/post.entity';
+import { Post as PostEntity } from '../../database/entities/post.entity';
 
 @Controller('posts')
 export class PostsController {
@@ -21,22 +21,22 @@ export class PostsController {
   }
 
   @Post()
-  createPost(@Body() createPostDto: CreatePostDto): Promise<PostEntity> {
+  async createPost(@Body() createPostDto: CreatePostDto): Promise<PostEntity> {
     return this.postsService.createPost(createPostDto);
   }
 
   @Get()
-  getPosts(): Promise<PostEntity[]> {
+  async getPosts(): Promise<PostEntity[]> {
     return this.postsService.getAllPosts();
   }
 
   @Get(':id')
-  getPostById(@Param('id') id: string): Promise<PostEntity> {
+  async getPostById(@Param('id') id: string): Promise<PostEntity> {
     return this.postsService.getPostById(id);
   }
 
   @Put(':id')
-  updatePost(
+  async updatePost(
     @Param('id') id: string,
     @Body() updatePostDto: UpdatePostDto,
   ): Promise<PostEntity> {
@@ -44,7 +44,7 @@ export class PostsController {
   }
 
   @Delete(':id')
-  deletePost(@Param('id') id: string) {
+  async deletePost(@Param('id') id: string) {
     return this.postsService.deletePost(id);
   }
 }

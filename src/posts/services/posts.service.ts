@@ -1,9 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { CreatePostDto } from '../dtos/create-post.dto';
-import { PostRepository } from 'src/database/repositories/post.repository';
-import { create } from 'domain';
-import { UserRepository } from 'src/database/repositories/user.repository';
-import { InjectRepository } from '@nestjs/typeorm';
+import { PostRepository } from '../../database/repositories/post.repository';
+import { UserRepository } from '../../database/repositories/user.repository';
 import { Repository } from 'typeorm';
 import { Post } from 'src/database/entities/post.entity';
 import { UpdatePostDto } from '../dtos/update-post.dto';
