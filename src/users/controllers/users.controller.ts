@@ -10,7 +10,7 @@ import {
   Query,
 } from '@nestjs/common';
 import { CreateUserDto } from '../dtos/create-user.dto';
-import { UpdateUserDto } from 'src/users/dtos/update-user.dto';
+import { UpdateUserDto } from '../dtos/update-user.dto';
 import { UsersService } from '../services/users.service';
 import { User } from '../../database/entities/user.entity';
 import { FilterUserDto } from '../dtos/filter-user.dto';
@@ -25,36 +25,39 @@ export class UsersController {
   }
 
   @Post()
-  createUser(@Body() createUser: CreateUserDto) {
+  async createUser(@Body() createUser: CreateUserDto): Promise<User> {
     this.logger.log('Creating user', createUser);
     return this.usersService.createUser(createUser);
   }
 
   @Get()
-  findAllUsers() {
+  async findAllUsers(): Promise<User[]> {
     this.logger.log('Fetching all users');
     return this.usersService.findAllUsers();
   }
 
   @Get('filters')
-  filterUsers(@Query() filters: FilterUserDto) {
+  async filterUsers(@Query() filters: FilterUserDto): Promise<User[]> {
     return this.usersService.filterUsers(filters);
   }
 
   @Get(':id')
-  findUser(@Param('id') id: string) {
+  async findUser(@Param('id') id: string): Promise<User> {
     this.logger.log('Fetching user #' + id);
     return this.usersService.findOneUser(id);
   }
 
   @Put(':id')
-  updateUser(@Param('id') id: string, @Body() updateUser: UpdateUserDto) {
+  async updateUser(
+    @Param('id') id: string,
+    @Body() updateUser: UpdateUserDto,
+  ): Promise<User> {
     this.logger.log('Updating user #' + id);
     return this.usersService.updateUser(updateUser, id);
   }
 
   @Delete(':id')
-  deleteUser(@Param('id') id: string) {
+  async deleteUser(@Param('id') id: string) {
     this.logger.log('Deleting user #' + id);
 
     return this.usersService.deleteUser(id);

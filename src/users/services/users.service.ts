@@ -4,11 +4,11 @@ import {
   Logger,
   NotFoundException,
 } from '@nestjs/common';
-import { UpdateUserDto } from 'src/users/dtos/update-user.dto';
+import { UpdateUserDto } from '../dtos/update-user.dto';
 import { User } from '../../database/entities/user.entity';
 import { CreateUserDto } from '../dtos/create-user.dto';
 import { FilterUserDto } from '../dtos/filter-user.dto';
-import { UserRepository } from 'src/database/repositories/user.repository';
+import { UserRepository } from '../../database/repositories/user.repository';
 
 @Injectable()
 export class UsersService {
