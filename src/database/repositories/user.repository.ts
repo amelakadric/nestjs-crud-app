@@ -23,10 +23,14 @@ export class UserRepository extends Repository<User> {
   }
 
   async findAll(): Promise<User[]> {
-    const users = await this.find();
-    if (users?.length === 0) {
-      throw new NotFoundException('No users found.');
-    }
+    // const users = await this.find();
+    // if (users?.length === 0) {
+    //   throw new NotFoundException('No users found.');
+    // }
+    // return users;
+
+    const query = this.createQueryBuilder().select('*').from('users', 'u');
+    const users = await query.getRawMany();
     return users;
   }
 

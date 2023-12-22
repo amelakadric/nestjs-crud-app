@@ -32,7 +32,10 @@ export class PostsService {
   }
 
   async updatePost(id: string, updatePostDto: UpdatePostDto): Promise<Post> {
-    const updatedPost = await this.postRepository.getPostById(Number(id));
+    const updatedPost = await this.postRepository.updatePost(
+      Number(id),
+      updatePostDto,
+    );
     this.logger.log('Post uploaded', { updatedPost });
     return updatedPost;
   }
