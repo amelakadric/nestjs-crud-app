@@ -9,6 +9,7 @@ import { User } from '../../database/entities/user.entity';
 import { CreateUserDto } from '../dtos/create-user.dto';
 import { FilterUserDto } from '../dtos/filter-user.dto';
 import { UserRepository } from '../../database/repositories/user.repository';
+import { Post } from '../../database/entities/post.entity';
 
 @Injectable()
 export class UsersService {

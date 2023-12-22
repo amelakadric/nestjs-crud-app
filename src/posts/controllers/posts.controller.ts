@@ -47,4 +47,9 @@ export class PostsController {
   async deletePost(@Param('id') id: string) {
     return this.postsService.deletePost(id);
   }
+
+  @Get('topPosts/:id')
+  async getUserWithTopPosts(@Param('id') id: string) {
+    return this.postsService.getTopPostsOfUser(id);
+  }
 }

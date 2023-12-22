@@ -45,4 +45,8 @@ export class PostsService {
     this.logger.log('Post deleted', { deletedPost });
     return `Delted post #${id}`;
   }
+
+  getTopPostsOfUser(id: string) {
+    return this.postRepository.getTopPostsOfUser(Number(id));
+  }
 }

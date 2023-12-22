@@ -58,4 +58,18 @@ export class PostRepository extends Repository<Post> {
     }
     return await this.remove(post);
   }
+
+  async getTopPostsOfUser(id: number): Promise<Post[]> {
+    //Primer: Dohvatiti 5 postova od korisnika sa najviše komentara i sortirajte opadajuće
+    const query = this.createQueryBuilder('posts')
+      .select('posts.postId', 'postId')
+      .addSelect('COUNT(comments.commentId) as commentCount')
+      .leftJoin('comments', 'comments', 'posts.postId = comments.postPostId')
+      .where('posts.userId = :id', { id: id })
+      .groupBy('posts.postId')
+      .orderBy('commentCount', 'DESC')
+      .limit(5);
+
+    return await query.getRawMany();
+  }
 }
