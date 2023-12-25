@@ -7,11 +7,13 @@ import {
   Param,
   Post,
   Put,
+  UseGuards,
 } from '@nestjs/common';
 import { PostsService } from '../services/posts.service';
 import { CreatePostDto } from '../dtos/create-post.dto';
 import { UpdatePostDto } from '../dtos/update-post.dto';
 import { Post as PostEntity } from '../../database/entities/post.entity';
+import { AuthGuard } from 'src/auth/guards/auth.guard';
 
 @Controller('posts')
 export class PostsController {
@@ -20,6 +22,7 @@ export class PostsController {
     this.logger = new Logger(PostsController.name);
   }
 
+  @UseGuards(AuthGuard)
   @Post()
   async createPost(@Body() createPostDto: CreatePostDto): Promise<PostEntity> {
     return this.postsService.createPost(createPostDto);

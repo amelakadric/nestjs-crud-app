@@ -13,7 +13,7 @@ export class User {
   @Column({ type: 'varchar', nullable: false, unique: true })
   name: string;
 
-  @Column({ select: false, type: 'varchar', nullable: false, unique: false })
+  @Column({ type: 'varchar', nullable: false, unique: false })
   password: string;
 
   @OneToMany(() => Post, (post) => post.user, {

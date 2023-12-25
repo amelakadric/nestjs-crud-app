@@ -42,6 +42,14 @@ export class UserRepository extends Repository<User> {
     return user;
   }
 
+  async findByEmail(email: string): Promise<User | null> {
+    const user = await this.findOneBy({ email: email });
+    if (!user) {
+      throw new NotFoundException(`User with email #${email} not found.`);
+    }
+    return user;
+  }
+
   async store(user: CreateUserDto): Promise<User> {
     const userEmailAlreadyExists = await this.findOneBy({ email: user.email });
     if (userEmailAlreadyExists) {

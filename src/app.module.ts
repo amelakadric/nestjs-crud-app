@@ -10,6 +10,7 @@ import { typeOrmConfig } from './config/typeorm.config';
 import { CommentsModule } from './comments/comments.module';
 import { PostsModule } from './posts/posts.module';
 import * as Joi from 'joi';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -32,6 +33,7 @@ import * as Joi from 'joi';
     TypeOrmModule.forRootAsync({
       useFactory: async () => typeOrmConfig(),
     }),
+    AuthModule,
   ],
   controllers: [AppController, UsersController],
   providers: [AppService],
