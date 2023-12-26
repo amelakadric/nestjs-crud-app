@@ -12,15 +12,7 @@ import { RolesGuard } from 'src/auth/guards/roles.guard';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Post, User, PostRepository]), AuthModule],
-  providers: [
-    PostsService,
-    PostRepository,
-    UserRepository,
-    {
-      provide: APP_GUARD,
-      useClass: RolesGuard,
-    },
-  ],
+  providers: [PostsService, PostRepository, UserRepository, RolesGuard],
   controllers: [PostsController],
   exports: [PostsService],
 })

@@ -50,6 +50,8 @@ export class PostsController {
     return this.postsService.updatePost(id, updatePostDto);
   }
 
+  @UseGuards(JwtAuthGuard)
+  @UseGuards(RolesGuard)
   @Delete(':id')
   @Roles(Role.Admin)
   async deletePost(@Param('id') id: string) {
