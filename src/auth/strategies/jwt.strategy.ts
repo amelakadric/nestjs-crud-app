@@ -12,11 +12,18 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
       jwtFromRequest: Extractor.fromCookie('jwt'),
       ignoreExpiration: false,
       secretOrKey: process.env.JWT_SECRET_KEY,
+      passReqToCallback: true,
     });
   }
 
-  async validate(payload: any) {
+  async validate(request: any, payload: any) {
     console.log(payload);
+    request.user = {
+      userId: payload.sub,
+      email: payload.email,
+      role: payload.role,
+    };
+    console.log(request.user);
     return { userId: payload.sub, email: payload.email, role: payload.role };
   }
 }

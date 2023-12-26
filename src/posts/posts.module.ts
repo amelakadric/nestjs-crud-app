@@ -9,6 +9,7 @@ import { User } from 'src/database/entities/user.entity';
 import { APP_GUARD } from '@nestjs/core';
 import { AuthModule } from 'src/auth/auth.module';
 import { RolesGuard } from 'src/auth/guards/roles.guard';
+import { JwtAuthGuard } from 'src/auth/guards/jwt.guard';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Post, User, PostRepository]), AuthModule],

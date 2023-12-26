@@ -7,6 +7,7 @@ import {
   Param,
   Post,
   Put,
+  Req,
   UseGuards,
 } from '@nestjs/common';
 import { PostsService } from '../services/posts.service';
@@ -51,10 +52,11 @@ export class PostsController {
   }
 
   @UseGuards(JwtAuthGuard)
-  @UseGuards(RolesGuard)
   @Delete(':id')
   @Roles(Role.Admin)
-  async deletePost(@Param('id') id: string) {
+  @UseGuards(RolesGuard)
+  async deletePost(@Param('id') id: string, @Req() req) {
+    console.log(req.user);
     return this.postsService.deletePost(id);
   }
 
