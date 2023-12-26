@@ -9,6 +9,7 @@ import {
   HttpStatus,
   NotFoundException,
 } from '@nestjs/common';
+import { MetaDataDto } from 'src/users/dtos/paginated-response.dto';
 
 export class UserRepository extends Repository<User> {
   constructor(
@@ -22,21 +23,24 @@ export class UserRepository extends Repository<User> {
     );
   }
 
-  async findAll(page: number, pageSize: number): Promise<User[]> {
+  async findAll(page: number, pageSize: number) {
     const start = (page - 1) * pageSize;
 
-    // const users = await this.find({ skip: start, take: pageSize });
-    // if (users?.length === 0) {
-    //   throw new NotFoundException('No users found.');
-    // }
-    // return users;
+    const result = await this.findAndCount({
+      skip: start,
+      take: pageSize,
+    });
+    if (result[0]?.length === 0) {
+      throw new NotFoundException('No users found.');
+    }
+    return result;
 
-    const query = this.createQueryBuilder()
-      .select('*')
-      .from('users', 'u')
-      .offset(start)
-      .limit(pageSize);
-    return await query.getRawMany();
+    // const query = this.createQueryBuilder()
+    //   .select('*')
+    //   .from('users', 'u')
+    //   .offset(start)
+    //   .limit(pageSize);
+    // return await query.getRawMany();
   }
 
   async findById(id: number): Promise<User | null> {

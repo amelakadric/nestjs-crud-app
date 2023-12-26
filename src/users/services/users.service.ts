@@ -31,13 +31,14 @@ export class UsersService {
     query.page = query.page ? query.page : 1;
     query.perPage = query.perPage ? query.perPage : 10;
 
-    const users = await this.userRepository.findAll(query.page, query.perPage);
+    const result = await this.userRepository.findAll(query.page, query.perPage);
 
-    const result = new PaginatedResponseDto<User>();
-    result._meta = query;
-    result._meta.total = users.length;
-    result.list = users;
-    return result;
+    const ret = new PaginatedResponseDto<User>();
+    ret._meta = query;
+    ret.list = result[0];
+    ret._meta.total = result[1];
+
+    return ret;
   }
 
   async findOneUser(id: string): Promise<User> {
