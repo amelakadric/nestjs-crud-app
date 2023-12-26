@@ -26,7 +26,8 @@ export class AuthController {
     @Res({ passthrough: true }) res: Response,
     @Body() loginDto: LogInDto,
   ) {
-    const jwt = this.authService.login(req.user);
+    const jwt = await this.authService.login(req.user);
+    console.log(jwt);
 
     res.cookie('jwt', jwt, { httpOnly: true });
 
