@@ -18,6 +18,10 @@ import { filter } from 'rxjs';
 import { ParseIntPipe } from 'src/utils/parse-int.pipe';
 import { query } from 'express';
 import { PaginationDto } from '../dtos/pagination.dto';
+import {
+  MetaDataDto,
+  PaginatedResponseDto,
+} from '../dtos/paginated-response.dto';
 
 @Controller('users')
 export class UsersController {
@@ -33,7 +37,9 @@ export class UsersController {
   }
 
   @Get()
-  async findAllUsers(@Query() query: PaginationDto): Promise<User[]> {
+  async findAllUsers(
+    @Query() query: MetaDataDto,
+  ): Promise<PaginatedResponseDto<User>> {
     this.logger.log('Fetching all users');
     return this.usersService.findAllUsers(query);
   }

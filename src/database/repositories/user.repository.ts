@@ -23,12 +23,13 @@ export class UserRepository extends Repository<User> {
   }
 
   async findAll(page: number, pageSize: number): Promise<User[]> {
-    // const users = await this.find();
+    const start = (page - 1) * pageSize;
+
+    // const users = await this.find({ skip: start, take: pageSize });
     // if (users?.length === 0) {
     //   throw new NotFoundException('No users found.');
     // }
     // return users;
-    const start = (page - 1) * pageSize;
 
     const query = this.createQueryBuilder()
       .select('*')
