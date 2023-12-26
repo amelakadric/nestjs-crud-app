@@ -13,7 +13,11 @@ import { PostsService } from '../services/posts.service';
 import { CreatePostDto } from '../dtos/create-post.dto';
 import { UpdatePostDto } from '../dtos/update-post.dto';
 import { Post as PostEntity } from '../../database/entities/post.entity';
-import { AuthGuard } from 'src/auth/guards/auth.guard';
+import { LocalAuthGuard } from 'src/auth/guards/local-auth.guard';
+import { JwtAuthGuard } from 'src/auth/guards/jwt.guard';
+import { RolesGuard } from 'src/auth/guards/roles.guard';
+import { Roles } from 'src/auth/decorators/roles.decorator';
+import { Role } from 'src/utils/roles.enum';
 
 @Controller('posts')
 export class PostsController {
@@ -22,7 +26,7 @@ export class PostsController {
     this.logger = new Logger(PostsController.name);
   }
 
-  @UseGuards(AuthGuard)
+  @UseGuards(JwtAuthGuard)
   @Post()
   async createPost(@Body() createPostDto: CreatePostDto): Promise<PostEntity> {
     return this.postsService.createPost(createPostDto);
@@ -47,6 +51,7 @@ export class PostsController {
   }
 
   @Delete(':id')
+  @Roles(Role.Admin)
   async deletePost(@Param('id') id: string) {
     return this.postsService.deletePost(id);
   }

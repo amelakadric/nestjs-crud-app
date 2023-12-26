@@ -16,6 +16,8 @@ import { User } from '../../database/entities/user.entity';
 import { FilterUserDto } from '../dtos/filter-user.dto';
 import { filter } from 'rxjs';
 import { ParseIntPipe } from 'src/utils/parse-int.pipe';
+import { query } from 'express';
+import { PaginationDto } from '../dtos/pagination.dto';
 
 @Controller('users')
 export class UsersController {
@@ -31,9 +33,9 @@ export class UsersController {
   }
 
   @Get()
-  async findAllUsers(): Promise<User[]> {
+  async findAllUsers(@Query() query: PaginationDto): Promise<User[]> {
     this.logger.log('Fetching all users');
-    return this.usersService.findAllUsers();
+    return this.usersService.findAllUsers(query);
   }
 
   @Get(':id')

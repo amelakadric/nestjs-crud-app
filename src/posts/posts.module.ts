@@ -7,17 +7,18 @@ import { Post } from 'src/database/entities/post.entity';
 import { UserRepository } from 'src/database/repositories/user.repository';
 import { User } from 'src/database/entities/user.entity';
 import { APP_GUARD } from '@nestjs/core';
-import { AuthGuard } from 'src/auth/guards/auth.guard';
+import { AuthModule } from 'src/auth/auth.module';
+import { RolesGuard } from 'src/auth/guards/roles.guard';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Post, User, PostRepository])],
+  imports: [TypeOrmModule.forFeature([Post, User, PostRepository]), AuthModule],
   providers: [
     PostsService,
     PostRepository,
     UserRepository,
     {
       provide: APP_GUARD,
-      useClass: AuthGuard,
+      useClass: RolesGuard,
     },
   ],
   controllers: [PostsController],

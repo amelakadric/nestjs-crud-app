@@ -1,5 +1,6 @@
 import { ParseIntPipe } from '@nestjs/common';
-import { IsEmail, IsInt, IsString } from 'class-validator';
+import { IsEmail, IsEnum, IsInt, IsString } from 'class-validator';
+import { Role } from 'src/utils/roles.enum';
 
 export class CreateUserDto {
   @IsEmail()
@@ -10,4 +11,7 @@ export class CreateUserDto {
 
   @IsString()
   password: string;
+
+  @IsEnum(Role)
+  role: Role;
 }

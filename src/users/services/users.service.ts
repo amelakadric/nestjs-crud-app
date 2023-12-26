@@ -10,6 +10,7 @@ import { CreateUserDto } from '../dtos/create-user.dto';
 import { FilterUserDto } from '../dtos/filter-user.dto';
 import { UserRepository } from '../../database/repositories/user.repository';
 import { Post } from '../../database/entities/post.entity';
+import { PaginationDto } from '../dtos/pagination.dto';
 
 @Injectable()
 export class UsersService {
@@ -22,8 +23,11 @@ export class UsersService {
     return this.userRepository.store(createUser);
   }
 
-  async findAllUsers(): Promise<User[]> {
-    return this.userRepository.findAll();
+  async findAllUsers(query: PaginationDto): Promise<User[]> {
+    query.page = query.page ? query.page : 1;
+    query.pageSize = query.pageSize ? query.pageSize : 10;
+
+    return this.userRepository.findAll(query.page, query.pageSize);
   }
 
   async findOneUser(id: string): Promise<User> {

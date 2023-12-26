@@ -29,7 +29,7 @@ export class Post {
   user: User;
 
   @OneToMany(() => Comment, (comment) => comment.post, {
-    eager: true,
+    // eager: true,
   })
   comments: Comment[];
 }

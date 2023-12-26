@@ -22,16 +22,20 @@ export class UserRepository extends Repository<User> {
     );
   }
 
-  async findAll(): Promise<User[]> {
+  async findAll(page: number, pageSize: number): Promise<User[]> {
     // const users = await this.find();
     // if (users?.length === 0) {
     //   throw new NotFoundException('No users found.');
     // }
     // return users;
+    const start = (page - 1) * pageSize;
 
-    const query = this.createQueryBuilder().select('*').from('users', 'u');
-    const users = await query.getRawMany();
-    return users;
+    const query = this.createQueryBuilder()
+      .select('*')
+      .from('users', 'u')
+      .offset(start)
+      .limit(pageSize);
+    return await query.getRawMany();
   }
 
   async findById(id: number): Promise<User | null> {
