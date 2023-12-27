@@ -29,7 +29,11 @@ export class PostsController {
 
   @UseGuards(JwtAuthGuard)
   @Post()
-  async createPost(@Body() createPostDto: CreatePostDto): Promise<PostEntity> {
+  async createPost(
+    @Body() createPostDto: CreatePostDto,
+    @Req() req,
+  ): Promise<PostEntity> {
+    createPostDto.userId = req.user.userId;
     return this.postsService.createPost(createPostDto);
   }
 

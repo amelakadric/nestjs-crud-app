@@ -5,6 +5,7 @@ import { UserRepository } from '../../database/repositories/user.repository';
 import { Repository } from 'typeorm';
 import { Post } from 'src/database/entities/post.entity';
 import { UpdatePostDto } from '../dtos/update-post.dto';
+import { request } from 'http';
 
 @Injectable()
 export class PostsService {

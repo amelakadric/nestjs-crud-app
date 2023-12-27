@@ -1,5 +1,5 @@
 import { Transform } from 'class-transformer';
-import { IsDate, IsNumber, IsString } from 'class-validator';
+import { IsDate, IsNumber, IsOptional, IsString } from 'class-validator';
 import { User } from 'src/database/entities/user.entity';
 
 export class CreatePostDto {
@@ -7,5 +7,6 @@ export class CreatePostDto {
   content: string;
 
   @IsNumber()
+  @IsOptional()
   userId: number;
 }
