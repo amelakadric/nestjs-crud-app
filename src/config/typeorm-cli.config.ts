@@ -11,7 +11,7 @@ export default new DataSource({
   host: 'localhost',
   port: 5432,
   username: 'amelakadric',
-  password: '',
+  password: 'pass',
   database: 'postgres',
   entities: [User, Post, Comment],
   migrations: [UserRefactor1703088796103, SchemaSync1703090739728],

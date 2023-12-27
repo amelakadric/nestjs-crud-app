@@ -20,7 +20,7 @@ dotenv.config();
     JwtModule.registerAsync({
       useFactory: () => {
         return {
-          secret: jwtConstants.secret,
+          secret: process.env.JWT_SECRET_KEY,
           signOptions: { expiresIn: '1h' },
         };
       },

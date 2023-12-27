@@ -20,7 +20,7 @@ import { AuthModule } from './auth/auth.module';
           .valid('development', 'production', 'test', 'provision')
           .default('development'),
         PORT: Joi.number().default(3000),
-        DATABASE_URL: Joi.string().uri(),
+        DATABASE_URL: Joi.string(),
       }),
       validationOptions: {
         allowUnknown: true,
