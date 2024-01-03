@@ -11,6 +11,8 @@ import { CommentsModule } from './comments/comments.module';
 import { PostsModule } from './posts/posts.module';
 import * as Joi from 'joi';
 import { AuthModule } from './auth/auth.module';
+import { CacheModule } from '@nestjs/cache-manager';
+import * as redisStore from 'cache-manager-redis-store';
 
 @Module({
   imports: [
@@ -34,6 +36,12 @@ import { AuthModule } from './auth/auth.module';
       useFactory: async () => typeOrmConfig(),
     }),
     AuthModule,
+    CacheModule.register({
+      isGlobal: true,
+      store: redisStore,
+      ttl: 10,
+      url: process.env.REDIS_URI,
+    }),
   ],
   controllers: [AppController, UsersController],
   providers: [AppService],

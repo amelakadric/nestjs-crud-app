@@ -1,4 +1,4 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Inject, Injectable, Logger } from '@nestjs/common';
 import { CreatePostDto } from '../dtos/create-post.dto';
 import { PostRepository } from '../../database/repositories/post.repository';
 import { UserRepository } from '../../database/repositories/user.repository';
@@ -6,6 +6,8 @@ import { Repository } from 'typeorm';
 import { Post } from 'src/database/entities/post.entity';
 import { UpdatePostDto } from '../dtos/update-post.dto';
 import { request } from 'http';
+import { CACHE_MANAGER } from '@nestjs/cache-manager';
+import { Cache } from 'cache-manager';
 
 @Injectable()
 export class PostsService {
@@ -13,6 +15,7 @@ export class PostsService {
   constructor(
     private readonly postRepository: PostRepository,
     private readonly userRepository: UserRepository,
+    @Inject(CACHE_MANAGER) private cacheService: Cache,
   ) {
     this.logger = new Logger(PostsService.name);
   }
@@ -25,7 +28,15 @@ export class PostsService {
   }
 
   async getAllPosts(): Promise<Post[]> {
-    return this.postRepository.getPosts();
+    const cachedPosts = await this.cacheService.get<Promise<Post[]>>('posts');
+
+    if (cachedPosts) {
+      console.log('Getting data from cache');
+      return cachedPosts;
+    }
+    const posts = await this.postRepository.getPosts();
+    await this.cacheService.set('posts', posts);
+    return posts;
   }
 
   async getPostById(id: string): Promise<Post> {
